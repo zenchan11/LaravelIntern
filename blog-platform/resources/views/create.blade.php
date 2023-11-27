@@ -31,7 +31,7 @@
 
 
 		<div class="form-group">
-			<form action='/update' method="post" enctype="multipart/form-data">
+			<form action='/store' method="post" enctype="multipart/form-data">
 
 				@csrf
 			     

@@ -20,7 +20,7 @@
 		        </a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="/admin/login">Admin
+		        <a class="nav-link" href="{{ route('admin.login')}}">Admin
 		        </a>
 		      </li>
 			<li>
@@ -62,7 +62,7 @@
         <a href="/"><span class="navbar-brand mb-0 h1">blogs</span></a>
         <a href="/create"><span class="btn btn-primary">Create Blog</span></a>
     </div>
-            @if(session('error'))
+        @if(session('error'))
             <div class="alert alert-primary" role="alert">
           {{ session('error')}}
         </div>
@@ -70,12 +70,15 @@
 
 	<div class="">
 		@foreach($blogs as $blog)
+			@if($blog->approved_status == '1')
 			<li><a href="show/{{ $blog->id}}">{{ $blog->Blog_title }}</a></li>
 			<img src="{{asset('/images/'.$blog->image)}}" style="width: 300px; height: 200px;">
 			<hr>
+			@endif
 		@endforeach
 
 	</div>
+	{{ $blogs->links()}}
 	<!-- Remove the container if you want to extend the Footer to full width. -->
 
 

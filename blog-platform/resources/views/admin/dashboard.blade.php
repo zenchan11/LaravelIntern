@@ -54,19 +54,18 @@
 
 
     <div>
-
+        <p>Unapproved posts</p>
         @foreach($blogs as $blog)
-            @if($blog->approved_status == 1)
+            @if($blog->approved_status == 0)
             <li><a href="show/{{ $blog->id}}">{{ $blog->Blog_title }}</a></li>
             <img src="{{asset('/images/'.$blog->image)}}" style="width: 300px; height: 200px;">
             <hr>
-
             @endif
         @endforeach
     </div>
     
 </div>
-            {{ $blog->links()}}
+
 
 
 @endsection

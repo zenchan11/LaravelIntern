@@ -4,6 +4,15 @@
 @endsection
 
 @section('content')
+    @if(session()->has('Permission'))
+    <div class="alert alert-success">
+
+        {{ session()->get('Permission') }}
+
+    </div>
+    @endif
+		
+	</div>
 
 	<div>
 		<li>{{ $blogs->Blog_title}}</li>
@@ -17,7 +26,7 @@
 	<div class="">
 		<a href="{{url('/delete/'.$blogs->id)}}" class="btn btn-primary" role="button">Delete</a>
 		<a href="{{url('/edit/'.$blogs->id)}}" class="btn btn-primary" role="button">edit</a>
-		
+		<a href="{{url('/admin/approve/'.$blogs->id)}}" class="btn btn-primary" role="button">Approve</a>
 	</div>
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Blog;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -23,7 +24,7 @@ class AdminController extends Controller
         ]);
 
     if(Auth::attempt($credentials)){
-        return redirect('/admin/dashboard')->with('success','login');
+        return redirect(route('admin.dashboard'))->with('success','login');
 
     }
     else{
@@ -40,38 +41,40 @@ class AdminController extends Controller
     public function registerUser(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'image' => 'required'
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required'
         ]);
-        if(Auth::user()){
-        $image = $request->file('image');
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('images'), $imageName);
-        $auth = Auth::user()->id;
 
-        $blog = new Blog;
-        $blog->Blog_title = $request->input('title');
-        $blog->description = $request->input('description');
-        $blog->image = $imageName;
-
-        $blog->user_id = $auth;
-        $blog->save();
-
-        session()->flash('success','successfully added');
-
-        return redirect('/dashboard');
-
-
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->role = 1;
+        $res = $user->save();
+        if($res)
+        {
+            return redirect('/')->with('success','you have registered succesfully');
         }
         else{
-            return redirect('/')->with('error','pleas login to access');
+            return back()->with('failure','something went wrong');
         }
+        echo "works";
         
     }
 
-    
+    public function approve(string $id){
+        $blogs = Blog::find($id);
+        $blogs->approved_status = '1';
+        $blogs->save();
+        return redirect()->route('admin.dashboard')->with('approved','the post have been approved');
+    }
 
+    public function show(string $id){
+        $blogs = Blog::find($id);
+        $users = User::find($blogs->user_id);
+        return view('admin.show',['blogs'=>$blogs,'users' => $users]);
+    }
 
     public function index()
     {
@@ -79,51 +82,11 @@ class AdminController extends Controller
         return view('admin.login');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function logout(){
+        session::flush();
+        Auth::logout();
+        return redirect('/');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
