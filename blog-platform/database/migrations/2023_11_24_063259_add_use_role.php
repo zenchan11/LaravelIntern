@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blogs', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->string('Blog_title');
-            $table->text('description');
-            $table->string('image');
-            $table->string('user_id');
-
+        Schema::table('users', function (Blueprint $table) {
+            //
+            $table->integer('role')->default(0);
         });
     }
 
@@ -27,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blogs');
+        Schema::table('users', function (Blueprint $table) {
+            //
+            $table->dropColumn('role');
+        });
     }
 };

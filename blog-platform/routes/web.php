@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,8 +18,24 @@ use App\Http\Controllers\BlogController;
 */
 
 //BlogController
-Route::get('/', [BlogController::class,'index']);
+Route::get('/', [BlogController::class,'index'])->name('blog');
 Route::get('/create',[BlogController::class,'create']);
 Route::post('/update',[BlogController::class,'update']);
 Route::get('/show/{id}',[BlogController::class, 'show']);
 Route::get('/delete/{id}',[BlogController::class,'destroy']);
+
+//authentication
+Route::get('/login', [LoginController::class,'login'])->name('login');
+Route::get('/register', [LoginController::class,'register'])->name('register');
+Route::post('/registerUser', [LoginController::class, 'registerUser'])->name('registerUser');
+Route::post('/loginUser', [LoginController::class, 'loginUser'])->name('loginUser');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+//admin
+Route::get('/admin/login', [AdminController::class,'login'])->name('admin.login');
+Route::get('/admin/register', [AdminController::class,'register'])->name('admin.register');
+Route::post('/admin/registerUser', [AdminController::class, 'registerUser'])->name('admin.registerUser');
+Route::post('/admin/loginUser', [AdminController::class, 'loginUser'])->name('admin.loginUser');
+Route::get('/admin/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::get('/admin/logout', [LoginController::class, 'logout'])->name('logout');

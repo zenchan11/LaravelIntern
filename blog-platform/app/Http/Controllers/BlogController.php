@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Blog;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class BlogController extends Controller
 {
@@ -41,7 +43,8 @@ class BlogController extends Controller
     {
         //
         $blogs = Blog::find($id);
-        return view('show',['blogs'=>$blogs]);
+        $users = User::find($blogs->user_id);
+        return view('show',['blogs'=>$blogs,'users' => $users]);
     }
 
     /**
@@ -63,19 +66,30 @@ class BlogController extends Controller
             'description' => 'required',
             'image' => 'required'
         ]);
-        
+        if(Auth::user()){
         $image = $request->file('image');
         $imageName = time() . '.' . $image->getClientOriginalExtension();
         $image->move(public_path('images'), $imageName);
+        $auth = Auth::user()->id;
 
         $blog = new Blog;
         $blog->Blog_title = $request->input('title');
         $blog->description = $request->input('description');
         $blog->image = $imageName;
+
+        $blog->user_id = $auth;
         $blog->save();
 
         session()->flash('success','successfully added');
-        return redirect('/');
+
+        return redirect('/dashboard');
+
+
+        }
+        else{
+            return redirect('/')->with('error','pleas login to access');
+        }
+        
 
 
     }
@@ -86,10 +100,16 @@ class BlogController extends Controller
     public function destroy(string $id)
     {
         //
-        $res = Blog::where('id',$id)->delete();
-        session()->flash('deleted','successfully deleted');
+        $blogs = Blog::find($id);
+        if(Auth::User()->id == $blogs->user_id)
+        {
+            $res = Blog::where('id',$id)->delete();
+            session()->flash('deleted','successfully deleted');
 
         return redirect('/');
-
+    }
+    else{
+        return redirect()->back()->with('Permission','Not allowed');
+    }
     }
 }

@@ -3,7 +3,7 @@
 	show
 @endsection
 
-@section('content')
+
 	<div>
 		<button ><a href="{{url('/delete/'.$blogs->id)}}">Detele</a></button>
 	</div>
@@ -12,6 +12,7 @@
 		<img src="{{asset('/images/'.$blogs->image)}}" width="200;" height="200;">
 		<hr>
 		<p>{{ $blogs->description}}</p>
+		<p>Posted by, {{ $users->name}}</p>
 		
 
 	</div>
