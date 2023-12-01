@@ -20,7 +20,8 @@ class AdminController extends Controller
     }
 
     public function loginUser(LoginAdminRequest $request){
-
+        
+        $credentials = $request->validated();
         if(Auth::attempt($credentials)){
             return redirect()->route('admin.dashboard')->with('success','login');
 
