@@ -28,51 +28,59 @@
 
 <body>
 
-
-
-<div class="container">
+  <div class="container mt-4">
     @if(session()->has('success'))
-    <div class="alert alert-success">
-
-        {{ session()->get('success') }}
-
+    <div class="alert alert-success" role="alert">
+      {{ session()->get('success') }}
     </div>
     @endif
+
     @if(session()->has('deleted'))
-    <div class="alert alert-success">
-
-        {{ session()->get('deleted') }}
-
+    <div class="alert alert-success" role="alert">
+      {{ session()->get('deleted') }}
     </div>
     @endif
+
     @if(session()->has('failure'))
-    <div class="alert alert-success">
-
-        {{ session()->get('failure') }}
-
+    <div class="alert alert-danger" role="alert">
+      {{ session()->get('failure') }}
     </div>
     @endif
 
     @if(session()->has('Permission'))
-    <div class="alert alert-success">
-
-        {{ session()->get('Permission') }}
-
+    <div class="alert alert-warning" role="alert">
+      {{ session()->get('Permission') }}
     </div>
+    @endif
 
+    @if(session()->has('restored'))
+    <div class="alert alert-success" role="alert">
+      {{ session()->get('restored') }}
+    </div>
+    @endif
+
+    @if(session()->has('premeanantlyDeleted'))
+    <div class="alert alert-danger" role="alert">
+      {{ session()->get('premeanantlyDeleted') }}
+    </div>
     @endif
 
     @yield('content')
-<footer class="bg-light text-center text-lg-start">
-  <!-- Copyright -->
-  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-    © 2020 Copyright:
-    <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
   </div>
-  <!-- Copyright -->
-</footer>
-</div>
 
-</body>
+  <footer class="bg-light text-center text-lg-start mt-4">
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            © 2023 Copyright:
+            <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Copyright -->
+  </footer>
 
 </html>

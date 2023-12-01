@@ -31,11 +31,12 @@
             <li>
                 @else
                 <li class="nav-item">
-                    <a class="nav-link">Hello,{{Auth::user()->name}} </a>
+                    <a class="nav-link"><span class="navbar-brand mb-0 h1">Hello,{{Auth::user()->name}} </span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+                    <a class="nav-link" href="{{ route('logout') }}"><span class="btn btn-primary">Logout</span></a>
                 </li>
+
                 @endguest
            
             </ul>
@@ -47,22 +48,29 @@
         <div class="container">
             <a href="/"><span class="navbar-brand mb-0 h1">blog</span></a>
             <a href="/create"><span class="btn btn-primary">Create Blog</span></a>
+            <a href="/trash"><span class="btn btn-secondary">Trash</span></a>
         </div>
     </nav>
     </div>
     
 
-
-    <div>
-        <p>Unapproved posts</p>
+    
+    <div class="container">
+    <h2>Unapproved posts</h2>
+    
+    <ul class="list-unstyled">
         @foreach($blogs as $blog)
             @if($blog->approved_status == 0)
-            <li><a href="show/{{ $blog->id}}">{{ $blog->Blog_title }}</a></li>
-            <img src="{{asset('/images/'.$blog->image)}}" style="width: 300px; height: 200px;">
-            <hr>
+                <div class="card my-3">
+                    <li><a href="show/{{ $blog->id }}">{{ $blog->Blog_title }}</a></li>
+                    <img class="card-img-top" src="{{ asset('/images/'.$blog->image) }}" style="width: 300px; height: 200px;">
+                    <hr>
+                </div>
             @endif
         @endforeach
-    </div>
+    </ul>
+</div>
+
     
 </div>
 

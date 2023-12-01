@@ -66,7 +66,6 @@
     </div>
     
 </div>
-            {{ $blog->links()}}
 
 
 @endsection

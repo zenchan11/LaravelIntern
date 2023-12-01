@@ -5,18 +5,35 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use App\Models\User;
+use App\Traits\ApiResponseTrait;
+use App\Http\Requests\StorePostRequest;
+use App\Repositories\Interfaces\BlogRepositoryInterface;
+use Illuminate\Http\RedirectResponse;
+
 
 class BlogController extends Controller
 {
+    // for json responses
+    use ApiResponseTrait;
+    private $blogRepository;
+
+    public function __construct(BlogRepositoryInterface $blogRepository)
+    {
+        $this->blogRepository = $blogRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
+    
     public function index()
     {
         //
-        $blog = Blog::where('approved_status','1')->orderBy('created_at')->paginate(1);
-        return view('index',['blogs'=> $blog]);
+        // $blogs = Blog::where('approved_status','1')->orderBy('created_at')->paginate(1);
+        $blogs = $this->blogRepository->allBlogs();
+        return view('index',compact('blogs'));
     }
 
     /**
@@ -31,37 +48,16 @@ class BlogController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request): RedirectResponse
     {
-        //
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'image' => 'required'
-        ]);
+
         if(Auth::user()){
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $auth = Auth::user()->id;
-
-            $blog = new Blog;
-            $blog->Blog_title = $request->input('title');
-            $blog->description = $request->input('description');
-            $blog->image = $imageName;
-
-            $blog->user_id = $auth;
-            $blog->approved_status =0;
-            $blog->save();
-
-            session()->flash('success','successfully added');
-
-        return redirect('/dashboard');
-
-
+            $this->blogRepository->storeBlogs($request);
+            session()->flash('success','successfully updated');
+            return redirect()->route('dashboard');
         }
         else{
-            return redirect('/')->with('error','please login to access');
+            return redirect()->route('blog')->with('error','please login to access');
         }
 
     }
@@ -72,9 +68,8 @@ class BlogController extends Controller
     public function show(string $id)
     {
         //
-        $blogs = Blog::find($id);
-        $users = User::find($blogs->user_id);
-        return view('show',['blogs'=>$blogs,'users' => $users]);
+        $data = $this->blogRepository->getBlogUserId($id);
+        return view('show',compact('data'));
     }
 
     /**
@@ -92,30 +87,17 @@ class BlogController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StorePostRequest $request, string $id)
     {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'image' => 'required'
-        ]);
-        if(Auth::user()->id){
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $auth = Auth::user()->id;
 
+        if(Auth::User()->id == Blog::find($id)->user_id || Auth::User()->role == 1){
             $blog = Blog::find($id);
-            $blog->Blog_title = $request->input('title');
-            $blog->description = $request->input('description');
-            $blog->image = $imageName;
-
-            $blog->user_id = $auth;
-            $blog->save();
+            $image = $this->blogRepository->changeImageName($request);
+            $this->blogRepository->updateBlog($blog,$image);
 
             session()->flash('success','successfully added');
 
-        return redirect('/dashboard');
+        return redirect()->route('dashboard');
 
 
         }
@@ -134,16 +116,18 @@ class BlogController extends Controller
     {
         //
         $blogs = Blog::find($id);
-        if(Auth::User()->id == $blogs->user_id || Auth::User()->role == 1)
+        if(Auth::User()->id == Blog::find($id)->user_id || Auth::User()->role == 1)
         {
             $res = Blog::where('id',$id)->delete();
             session()->flash('deleted','successfully deleted');
 
-        return redirect(route('dashboard'));
-    }
-    else{
+        return redirect(Auth::User()->role ==1 ? route('admin.dashboard') : route('dashboard'));
+;
 
-        return redirect()->back()->with('Permission','Not allowed');
-    }
+        }
+        else{
+
+            return redirect()->back()->with('Permission','Not allowed');
+        }
     }
 }

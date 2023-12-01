@@ -6,16 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Blog;
+use App\Http\Requests\LoginAdminRequest;
+use App\Http\Requests\RegisterAdminRequest;
 
 class LoginController extends Controller
 {
     //
    public function login() {
-    // if (Auth::attempt(['id' => $id, 'password' => $password])) {
-      
-    //      // Authentication passed...
-    //     return redirect()->intended('dashboard');
-    //   }
         return view('auth.login');
 
     }
@@ -25,13 +22,7 @@ class LoginController extends Controller
 
     }
 
-    public function registerUser(Request $request){
-        // $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required',
-        //     'password' => 'required'
-        // ]);
-
+    public function registerUser(RegisterAdminRequest $request){
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -46,15 +37,14 @@ class LoginController extends Controller
         }
     }  
 
-    public function LoginUser(Request $request){
+    public function LoginUser(LoginAdminRequest $request){
         $credentials = $request->only('email', 'password');
-        
         if (Auth::attempt($credentials)) {
             // Authentication passed...
-            $user = Auth::user();
+            $users = Auth::user();
             $blogs = Blog::all();
     
-            return view('auth.dashboard',['user' => $user,'blogs' =>$blogs]);
+            return view('auth.dashboard',compact('users','blogs'));//['user' => $user,'blogs' =>$blogs]);
         
         }
 

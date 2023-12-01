@@ -25,35 +25,50 @@
 </form> --}}
 
 
-	<div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
 
-		  
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Create a Blog</div>
 
+                <div class="card-body">
+                    <form action='/store' method="post" enctype="multipart/form-data">
+                        @csrf
 
-		<div class="form-group">
-			<form action='/store' method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="blog">Blog Title</label>
+                            <input class="form-control" type="text" name="title" id="blog">
+                            @error('title')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-				@csrf
-			     
-				<div class="form-group">
-					<label for="blog">Blog Title</label>
-					<input class ="form-control" type="text" name="title" id="blog">
-					
-				</div>
-				<div class="form-group">
-					<label for="Blog_description">Blog description</label>
-					<input class="form-control" type="text"  name="description" id="Blog_description">
-					
-				</div>
+                        <div class="form-group">
+                            <label for="Blog_description">Blog Description</label>
+                            <input class="form-control" type="text" name="description" id="Blog_description">
+                            @error('description')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-				
-				<div class="form-group">
-					<input type="file" name="image">
-				</div>
-			
-				<div class="form-group">
-					<input type="submit" value="submit">
-				</div>
-		</div>
-	</div>
+                        <div class="form-group">
+                            <label for="image">Blog Image</label>
+                            <input type="file" class="form-control-file" name="image" id="image">
+                            @error('image')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 @endsection

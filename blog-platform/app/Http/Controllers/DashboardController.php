@@ -12,15 +12,15 @@ class DashboardController extends Controller
     //
     public function Authdashboard(){
         
-        $blogs = Blog::where('approved_status',1)->orderBy('created_at')->paginate(1);
+        $blogs = Blog::where('approved_status',1)->orderBy('created_at')->paginate(3);
         $users = User::all();
-        return view('auth.dashboard',['blogs' => $blogs,'users' => $users]);
+        return view('auth.dashboard',compact('users','blogs'));
     }
 
         public function Admindashboard(){
         
         $blogs = Blog::all();
         $users = User::all();
-        return view('admin.dashboard',['blogs' => $blogs,'users' => $users]);
+        return view('admin.dashboard',compact('users','blogs'));
     }
 }

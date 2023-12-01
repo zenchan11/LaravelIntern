@@ -26,7 +26,11 @@
                     <div class="form-outline flex-fill mb-0">
                       <input type="text" id="form3Example1c" class="form-control" name="name" />
                       <label class="form-label" for="form3Example1c">Your Name</label>
+                      @error('name')
+                        <span class="text-danger">{{ $message }}</span>
+                      @enderror 
                     </div>
+
                   </div>
 
                   <div class="d-flex flex-row align-items-center mb-4">
@@ -34,7 +38,11 @@
                     <div class="form-outline flex-fill mb-0">
                       <input type="email" id="form3Example3c" class="form-control" name="email" />
                       <label class="form-label" for="form3Example3c">Your Email</label>
+                      @error('email')
+                        <span class="text-danger">{{ $message }}</span>
+                      @enderror
                     </div>
+ 
                   </div>
 
                   <div class="d-flex flex-row align-items-center mb-4">
@@ -42,7 +50,11 @@
                     <div class="form-outline flex-fill mb-0">
                       <input type="password" id="form3Example4c" class="form-control" name="password" />
                       <label class="form-label" for="form3Example4c">Password</label>
+                      @error('password')
+                        <span class="text-danger">{{ $message }}</span>
+                      @enderror 
                     </div>
+                  
                   </div>
 
 {{--                   <div class="d-flex flex-row align-items-center mb-4">
