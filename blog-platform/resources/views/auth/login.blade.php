@@ -52,30 +52,43 @@
         }
     </style>
 <body>
-
-
-
-    <form action="/loginUser" method="post">
-        <!-- User ID Field -->
-        @csrf
-        <label for="email">email:</label>
-        <input type="text" id="email" name="email" required>
-
-        <br>
-
-        <!-- Password Field -->
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-
-        <br>
-
-        <!-- Login Button -->
-        <input type="submit" value="Login">
-
-        <!-- Register Button -->
-    </form>
-    <div>
-        <a href="register">Don't have account register here</a>
+    <div class="container mt-5">
+        @if(session()->has('reset_success'))
+        <div class="alert alert-danger" role="alert">
+          {{ session()->get('reset_success') }}
+        </div>
+        @endif
+        <form action="/loginUser" method="post" class="col-md-6 offset-md-3 border p-4">
+            <!-- User ID Field -->
+            @csrf
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="text" class="form-control" id="email" name="email" required>
+            </div>
+    
+            <!-- Password Field -->
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+    
+            <!-- Login Button -->
+            <button type="submit" class="btn btn-primary">Login</button>
+    
+            <!-- Register Button - You can add a registration link with a button style if needed -->
+            <!-- Example: <a href="register" class="btn btn-secondary">Register</a> -->
+    
+            <!-- Forgot Password Link -->
+            <div class="mt-3">
+                <a href="/forgetpassword">Forgot your password?</a>
+            </div>
+        </form>
+    
+        <!-- Registration Link -->
+        <div class="mt-3 text-center">
+            <p>Don't have an account? <a href="register">Register here</a></p>
+        </div>
     </div>
+    
 </body>
 </html>

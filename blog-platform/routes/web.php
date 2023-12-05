@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApproveBlogController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\TrashController;
 /*
 |--------------------------------------------------------------------------
@@ -57,4 +58,9 @@ Route::get('/trash',[TrashController::class, 'trash'])->name('trash');
 Route::post('/trash/restore/{id}',[TrashController::class, 'restore'])->name('restore');
 Route::post('/trash/permeanantlyDelete/{id}',[TrashController::class, 'premeanantlyDelete'])->name('permeanantlyDelete');
 
-//
+//Password_reset
+Route::get('/forgetpassword',[PasswordResetController::class,'forgetPassword'])->name('forget.password');
+Route::post('/forgetpasswordpost',[PasswordResetController::class,'forgetPasswordPost'])->name('forget.password.post');
+Route::get('/resetpassword/{token}',[PasswordResetController::class,'resetPassword'])->name('reset.password');
+Route::post('/reset_password',[PasswordResetController::class,'resetPasswordPost'])->name('reset.password.post');
+
